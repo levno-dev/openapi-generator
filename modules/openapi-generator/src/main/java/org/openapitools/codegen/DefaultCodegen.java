@@ -17,7 +17,6 @@
 
 package org.openapitools.codegen;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Ticker;
@@ -44,6 +43,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.servers.ServerVariable;
 import io.swagger.v3.parser.util.SchemaTypeUtil;
+import joptsimple.internal.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.text.StringEscapeUtils;
@@ -70,6 +70,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -85,6 +89,29 @@ import static org.openapitools.codegen.utils.OnceLogger.once;
 import static org.openapitools.codegen.utils.StringUtils.*;
 
 public class DefaultCodegen implements CodegenConfig {
+
+    static final Path annotatedFilesPath = Paths.get("annotated_files.txt");
+    static Map<String, Integer> annotatedFiles = null;
+
+    public static void setLocalStorage(CodegenModel model) {
+        if (annotatedFiles != null && annotatedFiles.containsKey(model.classname)) {
+            model.classnameTypeId = annotatedFiles.get(model.classname);
+            model.isLocalStorage = true;
+        }
+    }
+    public static void setLocalStorageEnum(CodegenProperty property) {
+        if (annotatedFiles != null && annotatedFiles.containsKey(property.enumName)) {
+            property.enumNameTypeId = annotatedFiles.get(property.enumName);
+            property.isLocalStorage = true;
+        }
+    }
+    public static void setLocalStorageField(CodegenModel model, CodegenProperty property) {
+        if (model != null && model.isLocalStorage) {
+            property.fieldId = model.FIELDS++;
+            property.isLocalStorage = true;
+        }
+    }
+
     private final Logger LOGGER = LoggerFactory.getLogger(DefaultCodegen.class);
 
     public static FeatureSet DefaultFeatureSet;
@@ -545,6 +572,8 @@ public class DefaultCodegen implements CodegenConfig {
                 objsValue.put("package", modelPackage());
                 objsValue.setImports(importsValue);
                 objsValue.put("classname", cm.classname);
+                objsValue.put("classnameTypeId", cm.classnameTypeId);
+                objsValue.put("isLocalStorage", cm.isLocalStorage);
                 objsValue.putAll(additionalProperties);
                 objs.put(cm.name, objsValue);
             }
@@ -1805,6 +1834,27 @@ public class DefaultCodegen implements CodegenConfig {
      * returns string presentation of the example path (it's a constructor)
      */
     public DefaultCodegen() {
+        if (annotatedFiles == null) {
+            try {
+                if (Files.exists(annotatedFilesPath)) {
+                    List<String> files = Files.readAllLines(annotatedFilesPath);
+                    System.out.println("Annotated file found, classes: " + Strings.join(files, ", "));
+
+                    annotatedFiles = new HashMap<>();
+                    for (String file : files) {
+                        String[] split = file.split("=");
+                        if (split.length != 2)
+                            continue;
+                        int parsedInt = Integer.parseInt(split[1]);
+                        annotatedFiles.put(split[0], parsedInt);
+                    }
+                } else
+                    System.out.println("No annotated file path found at " + annotatedFilesPath.toAbsolutePath() + ", ignoring");
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
         CodegenType codegenType = getTag();
         if (codegenType == null) {
             codegenType = CodegenType.OTHER;
@@ -3126,6 +3176,7 @@ public class DefaultCodegen implements CodegenConfig {
         m.description = escapeText(schema.getDescription());
         m.unescapedDescription = schema.getDescription();
         m.classname = toModelName(name);
+        setLocalStorage(m);
         m.classVarName = toVarName(name);
         m.classFilename = toModelFilename(name);
         m.modelJson = Json.pretty(schema);
@@ -4125,6 +4176,7 @@ public class DefaultCodegen implements CodegenConfig {
         if (property.isEnum) {
             property.datatypeWithEnum = toEnumName(property);
             property.enumName = toEnumName(property);
+            setLocalStorageEnum(property);
         } else {
             property.datatypeWithEnum = property.dataType;
         }
@@ -4340,6 +4392,7 @@ public class DefaultCodegen implements CodegenConfig {
             // naming the enum with respect to the language enum naming convention
             // e.g. remove [], {} from array/map of enum
             property.enumName = toEnumName(property);
+            setLocalStorageEnum(property);
 
             // set default value for variable with inner enum
             if (property.defaultValue != null) {
@@ -4369,6 +4422,7 @@ public class DefaultCodegen implements CodegenConfig {
             // naming the enum with respect to the language enum naming convention
             // e.g. remove [], {} from array/map of enum
             property.enumName = toEnumName(property);
+            setLocalStorageEnum(property);
 
             // set default value for variable with inner enum
             if (property.defaultValue != null) {
@@ -5990,6 +6044,7 @@ public class DefaultCodegen implements CodegenConfig {
                     // properties in the parent model only
                     cp = fromProperty(key, prop, mandatory.contains(key));
                 }
+                setLocalStorageField(cm, cp);
 
                 if (cm != null && cm.allVars == vars && cp.isOverridden == null) { // processing allVars and it's a parent property
                     cp.isOverridden = true;
@@ -8164,6 +8219,7 @@ public class DefaultCodegen implements CodegenConfig {
         }
         cm.name = type;
         cm.classname = type;
+        setLocalStorage(cm);
         cm.vendorExtensions.put("x-is-one-of-interface", true);
         cm.interfaceModels = new ArrayList<>();
 

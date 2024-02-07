@@ -29,6 +29,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 @JsonIgnoreProperties({"parentModel", "interfaceModels"})
 public class CodegenModel implements IJsonSchemaValidationProperties {
+    public int FIELDS = 0;
     // The parent model name from the schemas. The parent is determined by inspecting the allOf, anyOf and
     // oneOf attributes in the OAS. First codegen inspects 'allOf', then 'anyOf', then 'oneOf'.
     // If there are multiple object references in the attribute ('allOf', 'anyOf', 'oneOf'), and one of the
@@ -58,6 +59,9 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
     // The classname is derived from the OpenAPI schema name, with sanitization and escaping rules applied.
     public String classname;
     // The value of the 'title' attribute in the OpenAPI document.
+
+    public int classnameTypeId;
+    public boolean isLocalStorage;
     public String title;
     public String description, classVarName, modelJson, dataType, xmlPrefix, xmlNamespace, xmlName;
     public String classFilename; // store the class file name, mainly used for import

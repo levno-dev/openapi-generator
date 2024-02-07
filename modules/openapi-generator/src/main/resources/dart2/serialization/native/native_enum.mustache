@@ -1,9 +1,19 @@
+import 'package:{{pubName}}/api.dart';
+
 {{#description}}/// {{{.}}}{{/description}}
+{{#isLocalStorage}}
+part '{{classFilename}}.g.dart';
+
+@HiveType(typeId: HiveTypeIds.{{{classname}}}TypeId)
+{{/isLocalStorage}}
 class {{{classname}}} {
   /// Instantiate a new enum with the provided [value].
-  const {{{classname}}}._(this.value);
+  const {{{classname}}}(this.value);
 
   /// The underlying value of this enum member.
+  {{#isLocalStorage}}
+  @HiveField(0)
+  {{/isLocalStorage}}
   final {{{dataType}}} value;
 
   @override
@@ -13,7 +23,7 @@ class {{{classname}}} {
 
   {{#allowableValues}}
     {{#enumVars}}
-  static const {{{name}}} = {{{classname}}}._({{#isString}}r{{/isString}}{{{value}}});
+  static const {{{name}}} = {{{classname}}}({{#isString}}r{{/isString}}{{{value}}});
     {{/enumVars}}
   {{/allowableValues}}
 

@@ -1,9 +1,15 @@
 {{#description}}/// {{{.}}}{{/description}}
+{{#isLocalStorage}}
+@HiveType(typeId: HiveTypeIds.{{{enumName}}}TypeId)
+{{/isLocalStorage}}
 class {{{enumName}}} {
   /// Instantiate a new enum with the provided [value].
-  const {{{enumName}}}._(this.value);
+  const {{{enumName}}}(this.value);
 
   /// The underlying value of this enum member.
+  {{#isLocalStorage}}
+  @HiveField(0)
+  {{/isLocalStorage}}
   final {{{dataType}}} value;
 
   @override
@@ -13,7 +19,7 @@ class {{{enumName}}} {
 
   {{#allowableValues}}
     {{#enumVars}}
-  static const {{{name}}} = {{{enumName}}}._({{#isString}}r{{/isString}}{{{value}}});
+  static const {{{name}}} = {{{enumName}}}({{#isString}}r{{/isString}}{{{value}}});
     {{/enumVars}}
   {{/allowableValues}}
 

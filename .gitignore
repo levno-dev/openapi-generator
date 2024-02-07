@@ -20,6 +20,8 @@ generated-code/*
 *.swp
 *.swo
 target
+!modules/openapi-generator-cli/target
+modules/openapi-generator-cli/target/*
 .idea
 .lib
 atlassian-ide-plugin.xml
@@ -281,3 +283,5 @@ samples/openapi3/client/petstore/go/privatekey.pem
 
 ## OCaml
 samples/client/petstore/ocaml/_build/
+
+!modules/openapi-generator-cli/target/openapi-generator-cli.jar

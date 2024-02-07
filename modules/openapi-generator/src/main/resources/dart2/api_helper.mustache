@@ -27,7 +27,7 @@ Iterable<QueryParam> _queryParams(String collectionFormat, String name, dynamic 
       collectionFormat = 'csv'; // ignore: parameter_assignments
     }
 
-    final delimiter = _delimiters[collectionFormat] ?? ',';
+    final delimiter = delimiters[collectionFormat] ?? ',';
 
     params.add(QueryParam(name, value.map<dynamic>(parameterToString).join(delimiter),));
   } else if (value != null) {
@@ -86,7 +86,7 @@ DateTime? mapDateTime(dynamic map, String key, [String? pattern]) {
     if (value is int) {
       millis = value;
     } else if (value is String) {
-      if (_isEpochMarker(pattern)) {
+      if (isEpochMarker(pattern)) {
         millis = int.tryParse(value);
       } else {
         return DateTime.tryParse(value);

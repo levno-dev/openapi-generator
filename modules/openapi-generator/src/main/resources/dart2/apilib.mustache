@@ -9,6 +9,22 @@ import 'package:collection/collection.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
+import 'package:hive/hive.dart';
+
+export 'dart:async';
+export 'dart:convert';
+export 'dart:io';
+
+export 'package:collection/collection.dart';
+export 'package:http/http.dart';
+export 'package:intl/intl.dart';
+export 'package:meta/meta.dart';
+export 'package:hive/hive.dart';
+
+{{#models}}{{#model}}import 'model/{{{classFilename}}}.dart';
+{{/model}}{{/models}}
+{{#models}}{{#model}}export 'model/{{{classFilename}}}.dart';
+{{/model}}{{/models}}
 
 part 'api_client.dart';
 part 'api_helper.dart';
@@ -21,19 +37,23 @@ part 'auth/http_bearer_auth.dart';
 
 {{#apiInfo}}{{#apis}}part 'api/{{{classFilename}}}.dart';
 {{/apis}}{{/apiInfo}}
-{{#models}}{{#model}}part 'model/{{{classFilename}}}.dart';
-{{/model}}{{/models}}
 
 /// An [ApiClient] instance that uses the default values obtained from
 /// the OpenAPI specification file.
 var defaultApiClient = ApiClient();
 
-const _delimiters = {'csv': ',', 'ssv': ' ', 'tsv': '\t', 'pipes': '|'};
-const _dateEpochMarker = 'epoch';
-const _deepEquality = DeepCollectionEquality();
-final _dateFormatter = DateFormat('yyyy-MM-dd');
-final _regList = RegExp(r'^List<(.*)>$');
-final _regSet = RegExp(r'^Set<(.*)>$');
-final _regMap = RegExp(r'^Map<String,(.*)>$');
+const delimiters = {'csv': ',', 'ssv': ' ', 'tsv': '\t', 'pipes': '|'};
+const dateEpochMarker = 'epoch';
+const deepEquality = DeepCollectionEquality();
+final dateFormatter = DateFormat('yyyy-MM-dd');
+final regList = RegExp(r'^List<(.*)>$');
+final regSet = RegExp(r'^Set<(.*)>$');
+final regMap = RegExp(r'^Map<String,(.*)>$');
 
-bool _isEpochMarker(String? pattern) => pattern == _dateEpochMarker || pattern == '/$_dateEpochMarker/';
+bool isEpochMarker(String? pattern) => pattern == dateEpochMarker || pattern == '/$dateEpochMarker/';
+
+class HiveTypeIds {
+  {{#models}}{{#model}}{{#isLocalStorage}}static const int {{{classname}}}TypeId = {{{classnameTypeId}}};
+  {{#vars}}{{#isEnum}}static const int {{{enumName}}}TypeId = {{{enumNameTypeId}}};
+  {{/isEnum}}{{/vars}}{{/isLocalStorage}}{{/model}}{{/models}}
+}
