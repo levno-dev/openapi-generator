@@ -130,7 +130,7 @@ class {{{classname}}} {
       assert(() {
         requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "{{{classname}}}[$key]" is missing from JSON.');
-          assert(!nullable && json[key] != null, 'Required non-nullable key "{{{classname}}}[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "{{{classname}}}[$key]" has a null value in JSON.');
         });
         return true;
       }());
