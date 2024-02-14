@@ -223,7 +223,7 @@ class {{{classname}}} {
               {{#isNumber}}
         {{{name}}}: {{#isNullable}}json[r'{{{baseName}}}'] == null
             ? {{#defaultValue}}{{{.}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}
-            : {{/isNullable}}{{{datatypeWithEnum}}}.parse('${json[r'{{{baseName}}}']}'),
+            : {{/isNullable}}mapValueOfType<{{{datatypeWithEnum}}}>(json, r'{{{baseName}}}'),
               {{/isNumber}}
               {{^isNumber}}
                 {{^isEnum}}
