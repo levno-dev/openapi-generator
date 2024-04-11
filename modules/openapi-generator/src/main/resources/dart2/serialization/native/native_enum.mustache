@@ -36,7 +36,7 @@ class {{{classname}}} {
   {{/allowableValues}}
   ];
 
-  static {{{classname}}}? fromJson(dynamic value) => {{{classname}}}TypeTransformer().decode(value);
+  static {{{classname}}}? fromJson(dynamic value) => {{{classname}}}TypeTransformer().decode(value.toString());
 
   static List<{{{classname}}}> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <{{{classname}}}>[];
