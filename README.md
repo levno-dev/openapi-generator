@@ -1,3 +1,4 @@
+`./mvnw clean install -Dmaven.test.skip=true`
 <h1 align="center">OpenAPI Generator</h1>
 
 
