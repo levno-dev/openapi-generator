@@ -1722,8 +1722,7 @@ public class DefaultCodegen implements CodegenConfig {
                         int parsedInt = Integer.parseInt(split[1]);
                         annotatedFiles.put(split[0], parsedInt);
                     }
-                } else
-                    System.out.println("No annotated file path found at " + annotatedFilesPath.toAbsolutePath() + ", ignoring");
+                }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
