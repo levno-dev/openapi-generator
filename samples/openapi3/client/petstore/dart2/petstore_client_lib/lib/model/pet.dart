@@ -8,7 +8,7 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 class Pet {
   /// Returns a new [Pet] instance.
@@ -51,8 +51,8 @@ class Pet {
     other.id == id &&
     other.category == category &&
     other.name == name &&
-    _deepEquality.equals(other.photoUrls, photoUrls) &&
-    _deepEquality.equals(other.tags, tags) &&
+    deepEquality.equals(other.photoUrls, photoUrls) &&
+    deepEquality.equals(other.tags, tags) &&
     other.status == status;
 
   @override
@@ -102,9 +102,9 @@ class Pet {
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        requiredKeys.forEach((key) {
+        requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "Pet[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Pet[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "Pet[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -164,16 +164,16 @@ class Pet {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
-    'name',
-    'photoUrls',
+  static const requiredKeys = <String, bool>{
+    'name': false,
+    'photoUrls': false,
   };
 }
 
 /// pet status in the store
 class PetStatusEnum {
   /// Instantiate a new enum with the provided [value].
-  const PetStatusEnum._(this.value);
+  const PetStatusEnum(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -183,9 +183,9 @@ class PetStatusEnum {
 
   String toJson() => value;
 
-  static const available = PetStatusEnum._(r'available');
-  static const pending = PetStatusEnum._(r'pending');
-  static const sold = PetStatusEnum._(r'sold');
+  static const available = PetStatusEnum(r'available');
+  static const pending = PetStatusEnum(r'pending');
+  static const sold = PetStatusEnum(r'sold');
 
   /// List of all possible values in this [enum][PetStatusEnum].
   static const values = <PetStatusEnum>[
@@ -194,7 +194,7 @@ class PetStatusEnum {
     sold,
   ];
 
-  static PetStatusEnum? fromJson(dynamic value) => PetStatusEnumTypeTransformer().decode(value);
+  static PetStatusEnum? fromJson(dynamic value) => PetStatusEnumTypeTransformer().decode(value.toString());
 
   static List<PetStatusEnum> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <PetStatusEnum>[];
@@ -208,6 +208,9 @@ class PetStatusEnum {
     }
     return result.toList(growable: growable);
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is PetStatusEnum && value == other.value;
 }
 
 /// Transformation class that can [encode] an instance of [PetStatusEnum] to String,

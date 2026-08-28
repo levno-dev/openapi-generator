@@ -8,7 +8,7 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 class EnumTest {
   /// Returns a new [EnumTest] instance.
@@ -135,9 +135,9 @@ class EnumTest {
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        requiredKeys.forEach((key) {
+        requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "EnumTest[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "EnumTest[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "EnumTest[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -197,15 +197,15 @@ class EnumTest {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
-    'enum_string_required',
+  static const requiredKeys = <String, bool>{
+    'enum_string_required': false,
   };
 }
 
 
 class EnumTestEnumStringEnum {
   /// Instantiate a new enum with the provided [value].
-  const EnumTestEnumStringEnum._(this.value);
+  const EnumTestEnumStringEnum(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -215,9 +215,9 @@ class EnumTestEnumStringEnum {
 
   String toJson() => value;
 
-  static const UPPER = EnumTestEnumStringEnum._(r'UPPER');
-  static const lower = EnumTestEnumStringEnum._(r'lower');
-  static const empty = EnumTestEnumStringEnum._(r'');
+  static const UPPER = EnumTestEnumStringEnum(r'UPPER');
+  static const lower = EnumTestEnumStringEnum(r'lower');
+  static const empty = EnumTestEnumStringEnum(r'');
 
   /// List of all possible values in this [enum][EnumTestEnumStringEnum].
   static const values = <EnumTestEnumStringEnum>[
@@ -226,7 +226,7 @@ class EnumTestEnumStringEnum {
     empty,
   ];
 
-  static EnumTestEnumStringEnum? fromJson(dynamic value) => EnumTestEnumStringEnumTypeTransformer().decode(value);
+  static EnumTestEnumStringEnum? fromJson(dynamic value) => EnumTestEnumStringEnumTypeTransformer().decode(value.toString());
 
   static List<EnumTestEnumStringEnum> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <EnumTestEnumStringEnum>[];
@@ -240,6 +240,9 @@ class EnumTestEnumStringEnum {
     }
     return result.toList(growable: growable);
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is EnumTestEnumStringEnum && value == other.value;
 }
 
 /// Transformation class that can [encode] an instance of [EnumTestEnumStringEnum] to String,
@@ -282,7 +285,7 @@ class EnumTestEnumStringEnumTypeTransformer {
 
 class EnumTestEnumStringRequiredEnum {
   /// Instantiate a new enum with the provided [value].
-  const EnumTestEnumStringRequiredEnum._(this.value);
+  const EnumTestEnumStringRequiredEnum(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -292,9 +295,9 @@ class EnumTestEnumStringRequiredEnum {
 
   String toJson() => value;
 
-  static const UPPER = EnumTestEnumStringRequiredEnum._(r'UPPER');
-  static const lower = EnumTestEnumStringRequiredEnum._(r'lower');
-  static const empty = EnumTestEnumStringRequiredEnum._(r'');
+  static const UPPER = EnumTestEnumStringRequiredEnum(r'UPPER');
+  static const lower = EnumTestEnumStringRequiredEnum(r'lower');
+  static const empty = EnumTestEnumStringRequiredEnum(r'');
 
   /// List of all possible values in this [enum][EnumTestEnumStringRequiredEnum].
   static const values = <EnumTestEnumStringRequiredEnum>[
@@ -303,7 +306,7 @@ class EnumTestEnumStringRequiredEnum {
     empty,
   ];
 
-  static EnumTestEnumStringRequiredEnum? fromJson(dynamic value) => EnumTestEnumStringRequiredEnumTypeTransformer().decode(value);
+  static EnumTestEnumStringRequiredEnum? fromJson(dynamic value) => EnumTestEnumStringRequiredEnumTypeTransformer().decode(value.toString());
 
   static List<EnumTestEnumStringRequiredEnum> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <EnumTestEnumStringRequiredEnum>[];
@@ -317,6 +320,9 @@ class EnumTestEnumStringRequiredEnum {
     }
     return result.toList(growable: growable);
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is EnumTestEnumStringRequiredEnum && value == other.value;
 }
 
 /// Transformation class that can [encode] an instance of [EnumTestEnumStringRequiredEnum] to String,
@@ -359,7 +365,7 @@ class EnumTestEnumStringRequiredEnumTypeTransformer {
 
 class EnumTestEnumIntegerEnum {
   /// Instantiate a new enum with the provided [value].
-  const EnumTestEnumIntegerEnum._(this.value);
+  const EnumTestEnumIntegerEnum(this.value);
 
   /// The underlying value of this enum member.
   final int value;
@@ -369,8 +375,8 @@ class EnumTestEnumIntegerEnum {
 
   int toJson() => value;
 
-  static const number1 = EnumTestEnumIntegerEnum._(1);
-  static const numberNegative1 = EnumTestEnumIntegerEnum._(-1);
+  static const number1 = EnumTestEnumIntegerEnum(1);
+  static const numberNegative1 = EnumTestEnumIntegerEnum(-1);
 
   /// List of all possible values in this [enum][EnumTestEnumIntegerEnum].
   static const values = <EnumTestEnumIntegerEnum>[
@@ -378,7 +384,7 @@ class EnumTestEnumIntegerEnum {
     numberNegative1,
   ];
 
-  static EnumTestEnumIntegerEnum? fromJson(dynamic value) => EnumTestEnumIntegerEnumTypeTransformer().decode(value);
+  static EnumTestEnumIntegerEnum? fromJson(dynamic value) => EnumTestEnumIntegerEnumTypeTransformer().decode(value.toString());
 
   static List<EnumTestEnumIntegerEnum> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <EnumTestEnumIntegerEnum>[];
@@ -392,6 +398,9 @@ class EnumTestEnumIntegerEnum {
     }
     return result.toList(growable: growable);
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is EnumTestEnumIntegerEnum && value == other.value;
 }
 
 /// Transformation class that can [encode] an instance of [EnumTestEnumIntegerEnum] to int,
@@ -433,7 +442,7 @@ class EnumTestEnumIntegerEnumTypeTransformer {
 
 class EnumTestEnumNumberEnum {
   /// Instantiate a new enum with the provided [value].
-  const EnumTestEnumNumberEnum._(this.value);
+  const EnumTestEnumNumberEnum(this.value);
 
   /// The underlying value of this enum member.
   final double value;
@@ -443,8 +452,8 @@ class EnumTestEnumNumberEnum {
 
   double toJson() => value;
 
-  static const number1Period1 = EnumTestEnumNumberEnum._('1.1');
-  static const numberNegative1Period2 = EnumTestEnumNumberEnum._('-1.2');
+  static const number1Period1 = EnumTestEnumNumberEnum('1.1');
+  static const numberNegative1Period2 = EnumTestEnumNumberEnum('-1.2');
 
   /// List of all possible values in this [enum][EnumTestEnumNumberEnum].
   static const values = <EnumTestEnumNumberEnum>[
@@ -452,7 +461,7 @@ class EnumTestEnumNumberEnum {
     numberNegative1Period2,
   ];
 
-  static EnumTestEnumNumberEnum? fromJson(dynamic value) => EnumTestEnumNumberEnumTypeTransformer().decode(value);
+  static EnumTestEnumNumberEnum? fromJson(dynamic value) => EnumTestEnumNumberEnumTypeTransformer().decode(value.toString());
 
   static List<EnumTestEnumNumberEnum> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <EnumTestEnumNumberEnum>[];
@@ -466,6 +475,9 @@ class EnumTestEnumNumberEnum {
     }
     return result.toList(growable: growable);
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is EnumTestEnumNumberEnum && value == other.value;
 }
 
 /// Transformation class that can [encode] an instance of [EnumTestEnumNumberEnum] to double,

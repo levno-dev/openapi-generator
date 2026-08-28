@@ -8,7 +8,7 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 class ParentWithNullable {
   /// Returns a new [ParentWithNullable] instance.
@@ -61,9 +61,9 @@ class ParentWithNullable {
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        requiredKeys.forEach((key) {
+        requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "ParentWithNullable[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "ParentWithNullable[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "ParentWithNullable[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -117,14 +117,14 @@ class ParentWithNullable {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
+  static const requiredKeys = <String, bool>{
   };
 }
 
 
 class ParentWithNullableTypeEnum {
   /// Instantiate a new enum with the provided [value].
-  const ParentWithNullableTypeEnum._(this.value);
+  const ParentWithNullableTypeEnum(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -134,14 +134,14 @@ class ParentWithNullableTypeEnum {
 
   String toJson() => value;
 
-  static const childWithNullable = ParentWithNullableTypeEnum._(r'ChildWithNullable');
+  static const childWithNullable = ParentWithNullableTypeEnum(r'ChildWithNullable');
 
   /// List of all possible values in this [enum][ParentWithNullableTypeEnum].
   static const values = <ParentWithNullableTypeEnum>[
     childWithNullable,
   ];
 
-  static ParentWithNullableTypeEnum? fromJson(dynamic value) => ParentWithNullableTypeEnumTypeTransformer().decode(value);
+  static ParentWithNullableTypeEnum? fromJson(dynamic value) => ParentWithNullableTypeEnumTypeTransformer().decode(value.toString());
 
   static List<ParentWithNullableTypeEnum> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <ParentWithNullableTypeEnum>[];
@@ -155,6 +155,9 @@ class ParentWithNullableTypeEnum {
     }
     return result.toList(growable: growable);
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is ParentWithNullableTypeEnum && value == other.value;
 }
 
 /// Transformation class that can [encode] an instance of [ParentWithNullableTypeEnum] to String,

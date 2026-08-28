@@ -8,7 +8,7 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 class MapTest {
   /// Returns a new [MapTest] instance.
@@ -29,10 +29,10 @@ class MapTest {
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is MapTest &&
-    _deepEquality.equals(other.mapMapOfString, mapMapOfString) &&
-    _deepEquality.equals(other.mapOfEnumString, mapOfEnumString) &&
-    _deepEquality.equals(other.directMap, directMap) &&
-    _deepEquality.equals(other.indirectMap, indirectMap);
+    deepEquality.equals(other.mapMapOfString, mapMapOfString) &&
+    deepEquality.equals(other.mapOfEnumString, mapOfEnumString) &&
+    deepEquality.equals(other.directMap, directMap) &&
+    deepEquality.equals(other.indirectMap, indirectMap);
 
   @override
   int get hashCode =>
@@ -65,9 +65,9 @@ class MapTest {
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        requiredKeys.forEach((key) {
+        requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "MapTest[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "MapTest[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "MapTest[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -123,14 +123,14 @@ class MapTest {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
+  static const requiredKeys = <String, bool>{
   };
 }
 
 
 class MapTestMapOfEnumStringEnum {
   /// Instantiate a new enum with the provided [value].
-  const MapTestMapOfEnumStringEnum._(this.value);
+  const MapTestMapOfEnumStringEnum(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -140,8 +140,8 @@ class MapTestMapOfEnumStringEnum {
 
   String toJson() => value;
 
-  static const UPPER = MapTestMapOfEnumStringEnum._(r'UPPER');
-  static const lower = MapTestMapOfEnumStringEnum._(r'lower');
+  static const UPPER = MapTestMapOfEnumStringEnum(r'UPPER');
+  static const lower = MapTestMapOfEnumStringEnum(r'lower');
 
   /// List of all possible values in this [enum][MapTestMapOfEnumStringEnum].
   static const values = <MapTestMapOfEnumStringEnum>[
@@ -149,7 +149,7 @@ class MapTestMapOfEnumStringEnum {
     lower,
   ];
 
-  static MapTestMapOfEnumStringEnum? fromJson(dynamic value) => MapTestMapOfEnumStringEnumTypeTransformer().decode(value);
+  static MapTestMapOfEnumStringEnum? fromJson(dynamic value) => MapTestMapOfEnumStringEnumTypeTransformer().decode(value.toString());
 
   static List<MapTestMapOfEnumStringEnum> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <MapTestMapOfEnumStringEnum>[];
@@ -163,6 +163,9 @@ class MapTestMapOfEnumStringEnum {
     }
     return result.toList(growable: growable);
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is MapTestMapOfEnumStringEnum && value == other.value;
 }
 
 /// Transformation class that can [encode] an instance of [MapTestMapOfEnumStringEnum] to String,

@@ -8,7 +8,7 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 class FormatTest {
   /// Returns a new [FormatTest] instance.
@@ -233,7 +233,7 @@ class FormatTest {
     } else {
       json[r'binary'] = null;
     }
-      json[r'date'] = _dateFormatter.format(this.date.toUtc());
+      json[r'date'] = dateFormatter.format(this.date.toUtc());
     if (this.dateTime != null) {
       json[r'dateTime'] = this.dateTime!.toUtc().toIso8601String();
     } else {
@@ -269,9 +269,9 @@ class FormatTest {
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        requiredKeys.forEach((key) {
+        requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "FormatTest[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "FormatTest[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "FormatTest[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -280,7 +280,7 @@ class FormatTest {
         integer: mapValueOfType<int>(json, r'integer'),
         int32: mapValueOfType<int>(json, r'int32'),
         int64: mapValueOfType<int>(json, r'int64'),
-        number: num.parse('${json[r'number']}'),
+        number: num.parse('${json[r'number'] ?? 0}'),
         float: mapValueOfType<double>(json, r'float'),
         double_: mapValueOfType<double>(json, r'double'),
         decimal: mapValueOfType<double>(json, r'decimal'),
@@ -339,11 +339,11 @@ class FormatTest {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
-    'number',
-    'byte',
-    'date',
-    'password',
+  static const requiredKeys = <String, bool>{
+    'number': false,
+    'byte': false,
+    'date': false,
+    'password': false,
   };
 }
 

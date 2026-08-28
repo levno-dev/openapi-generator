@@ -8,7 +8,7 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 class EnumArrays {
   /// Returns a new [EnumArrays] instance.
@@ -24,7 +24,7 @@ class EnumArrays {
   @override
   bool operator ==(Object other) => identical(this, other) || other is EnumArrays &&
     other.justSymbol == justSymbol &&
-    _deepEquality.equals(other.arrayEnum, arrayEnum);
+    deepEquality.equals(other.arrayEnum, arrayEnum);
 
   @override
   int get hashCode =>
@@ -57,9 +57,9 @@ class EnumArrays {
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        requiredKeys.forEach((key) {
+        requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "EnumArrays[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "EnumArrays[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "EnumArrays[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -113,14 +113,14 @@ class EnumArrays {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
+  static const requiredKeys = <String, bool>{
   };
 }
 
 
 class EnumArraysJustSymbolEnum {
   /// Instantiate a new enum with the provided [value].
-  const EnumArraysJustSymbolEnum._(this.value);
+  const EnumArraysJustSymbolEnum(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -130,8 +130,8 @@ class EnumArraysJustSymbolEnum {
 
   String toJson() => value;
 
-  static const greaterThanEqual = EnumArraysJustSymbolEnum._(r'>=');
-  static const dollar = EnumArraysJustSymbolEnum._(r'$');
+  static const greaterThanEqual = EnumArraysJustSymbolEnum(r'>=');
+  static const dollar = EnumArraysJustSymbolEnum(r'$');
 
   /// List of all possible values in this [enum][EnumArraysJustSymbolEnum].
   static const values = <EnumArraysJustSymbolEnum>[
@@ -139,7 +139,7 @@ class EnumArraysJustSymbolEnum {
     dollar,
   ];
 
-  static EnumArraysJustSymbolEnum? fromJson(dynamic value) => EnumArraysJustSymbolEnumTypeTransformer().decode(value);
+  static EnumArraysJustSymbolEnum? fromJson(dynamic value) => EnumArraysJustSymbolEnumTypeTransformer().decode(value.toString());
 
   static List<EnumArraysJustSymbolEnum> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <EnumArraysJustSymbolEnum>[];
@@ -153,6 +153,9 @@ class EnumArraysJustSymbolEnum {
     }
     return result.toList(growable: growable);
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is EnumArraysJustSymbolEnum && value == other.value;
 }
 
 /// Transformation class that can [encode] an instance of [EnumArraysJustSymbolEnum] to String,
@@ -194,7 +197,7 @@ class EnumArraysJustSymbolEnumTypeTransformer {
 
 class EnumArraysArrayEnumEnum {
   /// Instantiate a new enum with the provided [value].
-  const EnumArraysArrayEnumEnum._(this.value);
+  const EnumArraysArrayEnumEnum(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -204,8 +207,8 @@ class EnumArraysArrayEnumEnum {
 
   String toJson() => value;
 
-  static const fish = EnumArraysArrayEnumEnum._(r'fish');
-  static const crab = EnumArraysArrayEnumEnum._(r'crab');
+  static const fish = EnumArraysArrayEnumEnum(r'fish');
+  static const crab = EnumArraysArrayEnumEnum(r'crab');
 
   /// List of all possible values in this [enum][EnumArraysArrayEnumEnum].
   static const values = <EnumArraysArrayEnumEnum>[
@@ -213,7 +216,7 @@ class EnumArraysArrayEnumEnum {
     crab,
   ];
 
-  static EnumArraysArrayEnumEnum? fromJson(dynamic value) => EnumArraysArrayEnumEnumTypeTransformer().decode(value);
+  static EnumArraysArrayEnumEnum? fromJson(dynamic value) => EnumArraysArrayEnumEnumTypeTransformer().decode(value.toString());
 
   static List<EnumArraysArrayEnumEnum> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <EnumArraysArrayEnumEnum>[];
@@ -227,6 +230,9 @@ class EnumArraysArrayEnumEnum {
     }
     return result.toList(growable: growable);
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is EnumArraysArrayEnumEnum && value == other.value;
 }
 
 /// Transformation class that can [encode] an instance of [EnumArraysArrayEnumEnum] to String,

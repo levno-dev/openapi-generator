@@ -11,7 +11,15 @@
 part of openapi.api;
 
 class ApiClient {
-  ApiClient({this.basePath = 'http://petstore.swagger.io/v2', this.authentication,});
+  static bool _runOnce = false;
+
+  ApiClient({this.basePath = 'http://petstore.swagger.io/v2', this.authentication,}) {
+    if (!_runOnce) {
+        _runOnce = true;
+
+        
+    }
+  }
 
   final String basePath;
   final Authentication? authentication;
@@ -196,17 +204,17 @@ class ApiClient {
           return User.fromJson(value);
         default:
           dynamic match;
-          if (value is List && (match = _regList.firstMatch(targetType)?.group(1)) != null) {
+          if (value is List && (match = regList.firstMatch(targetType)?.group(1)) != null) {
             return value
               .map<dynamic>((dynamic v) => fromJson(v, match, growable: growable,))
               .toList(growable: growable);
           }
-          if (value is Set && (match = _regSet.firstMatch(targetType)?.group(1)) != null) {
+          if (value is Set && (match = regSet.firstMatch(targetType)?.group(1)) != null) {
             return value
               .map<dynamic>((dynamic v) => fromJson(v, match, growable: growable,))
               .toSet();
           }
-          if (value is Map && (match = _regMap.firstMatch(targetType)?.group(1)) != null) {
+          if (value is Map && (match = regMap.firstMatch(targetType)?.group(1)) != null) {
             return Map<String, dynamic>.fromIterables(
               value.keys.cast<String>(),
               value.values.map<dynamic>((dynamic v) => fromJson(v, match, growable: growable,)),

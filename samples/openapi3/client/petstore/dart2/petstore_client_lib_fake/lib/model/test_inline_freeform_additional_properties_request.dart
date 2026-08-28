@@ -8,7 +8,7 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 class TestInlineFreeformAdditionalPropertiesRequest {
   /// Returns a new [TestInlineFreeformAdditionalPropertiesRequest] instance.
@@ -57,9 +57,9 @@ class TestInlineFreeformAdditionalPropertiesRequest {
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        requiredKeys.forEach((key) {
+        requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "TestInlineFreeformAdditionalPropertiesRequest[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "TestInlineFreeformAdditionalPropertiesRequest[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "TestInlineFreeformAdditionalPropertiesRequest[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -112,7 +112,7 @@ class TestInlineFreeformAdditionalPropertiesRequest {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
+  static const requiredKeys = <String, bool>{
   };
 }
 

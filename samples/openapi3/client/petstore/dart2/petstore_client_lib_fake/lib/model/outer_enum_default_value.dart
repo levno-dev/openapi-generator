@@ -8,12 +8,12 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 
 class OuterEnumDefaultValue {
   /// Instantiate a new enum with the provided [value].
-  const OuterEnumDefaultValue._(this.value);
+  const OuterEnumDefaultValue(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -23,9 +23,9 @@ class OuterEnumDefaultValue {
 
   String toJson() => value;
 
-  static const placed = OuterEnumDefaultValue._(r'placed');
-  static const approved = OuterEnumDefaultValue._(r'approved');
-  static const delivered = OuterEnumDefaultValue._(r'delivered');
+  static const placed = OuterEnumDefaultValue(r'placed');
+  static const approved = OuterEnumDefaultValue(r'approved');
+  static const delivered = OuterEnumDefaultValue(r'delivered');
 
   /// List of all possible values in this [enum][OuterEnumDefaultValue].
   static const values = <OuterEnumDefaultValue>[
@@ -34,7 +34,7 @@ class OuterEnumDefaultValue {
     delivered,
   ];
 
-  static OuterEnumDefaultValue? fromJson(dynamic value) => OuterEnumDefaultValueTypeTransformer().decode(value);
+  static OuterEnumDefaultValue? fromJson(dynamic value) => OuterEnumDefaultValueTypeTransformer().decode(value.toString());
 
   static List<OuterEnumDefaultValue> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <OuterEnumDefaultValue>[];
@@ -48,6 +48,9 @@ class OuterEnumDefaultValue {
     }
     return result.toList(growable: growable);
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is OuterEnumDefaultValue && value == other.value;
 }
 
 /// Transformation class that can [encode] an instance of [OuterEnumDefaultValue] to String,

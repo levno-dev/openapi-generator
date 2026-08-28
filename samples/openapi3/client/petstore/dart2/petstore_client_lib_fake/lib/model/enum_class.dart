@@ -8,12 +8,12 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 
 class EnumClass {
   /// Instantiate a new enum with the provided [value].
-  const EnumClass._(this.value);
+  const EnumClass(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -23,9 +23,9 @@ class EnumClass {
 
   String toJson() => value;
 
-  static const abc = EnumClass._(r'_abc');
-  static const efg = EnumClass._(r'-efg');
-  static const leftParenthesisXyzRightParenthesis = EnumClass._(r'(xyz)');
+  static const abc = EnumClass(r'_abc');
+  static const efg = EnumClass(r'-efg');
+  static const leftParenthesisXyzRightParenthesis = EnumClass(r'(xyz)');
 
   /// List of all possible values in this [enum][EnumClass].
   static const values = <EnumClass>[
@@ -34,7 +34,7 @@ class EnumClass {
     leftParenthesisXyzRightParenthesis,
   ];
 
-  static EnumClass? fromJson(dynamic value) => EnumClassTypeTransformer().decode(value);
+  static EnumClass? fromJson(dynamic value) => EnumClassTypeTransformer().decode(value.toString());
 
   static List<EnumClass> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <EnumClass>[];
@@ -48,6 +48,9 @@ class EnumClass {
     }
     return result.toList(growable: growable);
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is EnumClass && value == other.value;
 }
 
 /// Transformation class that can [encode] an instance of [EnumClass] to String,

@@ -8,7 +8,7 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 class OuterComposite {
   /// Returns a new [OuterComposite] instance.
@@ -89,15 +89,15 @@ class OuterComposite {
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        requiredKeys.forEach((key) {
+        requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "OuterComposite[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "OuterComposite[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "OuterComposite[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return OuterComposite(
-        myNumber: num.parse('${json[r'my_number']}'),
+        myNumber: num.parse('${json[r'my_number'] ?? 0}'),
         myString: mapValueOfType<String>(json, r'my_string'),
         myBoolean: mapValueOfType<bool>(json, r'my_boolean'),
       );
@@ -146,7 +146,7 @@ class OuterComposite {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
+  static const requiredKeys = <String, bool>{
   };
 }
 

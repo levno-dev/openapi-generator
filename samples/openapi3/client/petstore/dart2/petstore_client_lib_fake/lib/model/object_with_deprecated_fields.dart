@@ -8,7 +8,7 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 class ObjectWithDeprecatedFields {
   /// Returns a new [ObjectWithDeprecatedFields] instance.
@@ -50,7 +50,7 @@ class ObjectWithDeprecatedFields {
     other.uuid == uuid &&
     other.id == id &&
     other.deprecatedRef == deprecatedRef &&
-    _deepEquality.equals(other.bars, bars);
+    deepEquality.equals(other.bars, bars);
 
   @override
   int get hashCode =>
@@ -95,16 +95,16 @@ class ObjectWithDeprecatedFields {
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        requiredKeys.forEach((key) {
+        requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "ObjectWithDeprecatedFields[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "ObjectWithDeprecatedFields[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "ObjectWithDeprecatedFields[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return ObjectWithDeprecatedFields(
         uuid: mapValueOfType<String>(json, r'uuid'),
-        id: num.parse('${json[r'id']}'),
+        id: num.parse('${json[r'id'] ?? 0}'),
         deprecatedRef: DeprecatedObject.fromJson(json[r'deprecatedRef']),
         bars: json[r'bars'] is Iterable
             ? (json[r'bars'] as Iterable).cast<String>().toList(growable: false)
@@ -155,7 +155,7 @@ class ObjectWithDeprecatedFields {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
+  static const requiredKeys = <String, bool>{
   };
 }
 

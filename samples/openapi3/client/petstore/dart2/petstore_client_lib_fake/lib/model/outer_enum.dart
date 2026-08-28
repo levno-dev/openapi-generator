@@ -8,12 +8,12 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 
 class OuterEnum {
   /// Instantiate a new enum with the provided [value].
-  const OuterEnum._(this.value);
+  const OuterEnum(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -23,9 +23,9 @@ class OuterEnum {
 
   String toJson() => value;
 
-  static const placed = OuterEnum._(r'placed');
-  static const approved = OuterEnum._(r'approved');
-  static const delivered = OuterEnum._(r'delivered');
+  static const placed = OuterEnum(r'placed');
+  static const approved = OuterEnum(r'approved');
+  static const delivered = OuterEnum(r'delivered');
 
   /// List of all possible values in this [enum][OuterEnum].
   static const values = <OuterEnum>[
@@ -34,7 +34,7 @@ class OuterEnum {
     delivered,
   ];
 
-  static OuterEnum? fromJson(dynamic value) => OuterEnumTypeTransformer().decode(value);
+  static OuterEnum? fromJson(dynamic value) => OuterEnumTypeTransformer().decode(value.toString());
 
   static List<OuterEnum> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <OuterEnum>[];
@@ -48,6 +48,9 @@ class OuterEnum {
     }
     return result.toList(growable: growable);
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is OuterEnum && value == other.value;
 }
 
 /// Transformation class that can [encode] an instance of [OuterEnum] to String,

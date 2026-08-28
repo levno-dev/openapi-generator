@@ -8,12 +8,12 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 
 class SingleRefType {
   /// Instantiate a new enum with the provided [value].
-  const SingleRefType._(this.value);
+  const SingleRefType(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -23,8 +23,8 @@ class SingleRefType {
 
   String toJson() => value;
 
-  static const admin = SingleRefType._(r'admin');
-  static const user = SingleRefType._(r'user');
+  static const admin = SingleRefType(r'admin');
+  static const user = SingleRefType(r'user');
 
   /// List of all possible values in this [enum][SingleRefType].
   static const values = <SingleRefType>[
@@ -32,7 +32,7 @@ class SingleRefType {
     user,
   ];
 
-  static SingleRefType? fromJson(dynamic value) => SingleRefTypeTypeTransformer().decode(value);
+  static SingleRefType? fromJson(dynamic value) => SingleRefTypeTypeTransformer().decode(value.toString());
 
   static List<SingleRefType> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <SingleRefType>[];
@@ -46,6 +46,9 @@ class SingleRefType {
     }
     return result.toList(growable: growable);
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is SingleRefType && value == other.value;
 }
 
 /// Transformation class that can [encode] an instance of [SingleRefType] to String,

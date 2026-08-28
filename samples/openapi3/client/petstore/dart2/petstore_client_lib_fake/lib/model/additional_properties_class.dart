@@ -8,7 +8,7 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 class AdditionalPropertiesClass {
   /// Returns a new [AdditionalPropertiesClass] instance.
@@ -23,8 +23,8 @@ class AdditionalPropertiesClass {
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is AdditionalPropertiesClass &&
-    _deepEquality.equals(other.mapProperty, mapProperty) &&
-    _deepEquality.equals(other.mapOfMapProperty, mapOfMapProperty);
+    deepEquality.equals(other.mapProperty, mapProperty) &&
+    deepEquality.equals(other.mapOfMapProperty, mapOfMapProperty);
 
   @override
   int get hashCode =>
@@ -53,9 +53,9 @@ class AdditionalPropertiesClass {
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        requiredKeys.forEach((key) {
+        requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "AdditionalPropertiesClass[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "AdditionalPropertiesClass[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "AdditionalPropertiesClass[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -109,7 +109,7 @@ class AdditionalPropertiesClass {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
+  static const requiredKeys = <String, bool>{
   };
 }
 

@@ -8,7 +8,7 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 class FakeBigDecimalMap200Response {
   /// Returns a new [FakeBigDecimalMap200Response] instance.
@@ -30,7 +30,7 @@ class FakeBigDecimalMap200Response {
   @override
   bool operator ==(Object other) => identical(this, other) || other is FakeBigDecimalMap200Response &&
     other.someId == someId &&
-    _deepEquality.equals(other.someMap, someMap);
+    deepEquality.equals(other.someMap, someMap);
 
   @override
   int get hashCode =>
@@ -63,15 +63,15 @@ class FakeBigDecimalMap200Response {
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        requiredKeys.forEach((key) {
+        requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "FakeBigDecimalMap200Response[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "FakeBigDecimalMap200Response[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "FakeBigDecimalMap200Response[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
       return FakeBigDecimalMap200Response(
-        someId: num.parse('${json[r'someId']}'),
+        someId: num.parse('${json[r'someId'] ?? 0}'),
         someMap: mapCastOfType<String, num>(json, r'someMap') ?? const {},
       );
     }
@@ -119,7 +119,7 @@ class FakeBigDecimalMap200Response {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
+  static const requiredKeys = <String, bool>{
   };
 }
 

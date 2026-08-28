@@ -8,7 +8,7 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 class ArrayTest {
   /// Returns a new [ArrayTest] instance.
@@ -26,9 +26,9 @@ class ArrayTest {
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is ArrayTest &&
-    _deepEquality.equals(other.arrayOfString, arrayOfString) &&
-    _deepEquality.equals(other.arrayArrayOfInteger, arrayArrayOfInteger) &&
-    _deepEquality.equals(other.arrayArrayOfModel, arrayArrayOfModel);
+    deepEquality.equals(other.arrayOfString, arrayOfString) &&
+    deepEquality.equals(other.arrayArrayOfInteger, arrayArrayOfInteger) &&
+    deepEquality.equals(other.arrayArrayOfModel, arrayArrayOfModel);
 
   @override
   int get hashCode =>
@@ -59,9 +59,9 @@ class ArrayTest {
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        requiredKeys.forEach((key) {
+        requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "ArrayTest[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "ArrayTest[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "ArrayTest[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -77,7 +77,7 @@ class ArrayTest {
           :  const [],
         arrayArrayOfModel: json[r'array_array_of_model'] is List
           ? (json[r'array_array_of_model'] as List).map((e) =>
-              ReadOnlyFirst.listFromJson(json[r'array_array_of_model'])
+              ReadOnlyFirst.listFromJson(e)
             ).toList()
           :  const [],
       );
@@ -126,7 +126,7 @@ class ArrayTest {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
+  static const requiredKeys = <String, bool>{
   };
 }
 

@@ -8,7 +8,7 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 class NullableClass {
   /// Returns a new [NullableClass] instance.
@@ -59,12 +59,12 @@ class NullableClass {
     other.stringProp == stringProp &&
     other.dateProp == dateProp &&
     other.datetimeProp == datetimeProp &&
-    _deepEquality.equals(other.arrayNullableProp, arrayNullableProp) &&
-    _deepEquality.equals(other.arrayAndItemsNullableProp, arrayAndItemsNullableProp) &&
-    _deepEquality.equals(other.arrayItemsNullable, arrayItemsNullable) &&
-    _deepEquality.equals(other.objectNullableProp, objectNullableProp) &&
-    _deepEquality.equals(other.objectAndItemsNullableProp, objectAndItemsNullableProp) &&
-    _deepEquality.equals(other.objectItemsNullable, objectItemsNullable);
+    deepEquality.equals(other.arrayNullableProp, arrayNullableProp) &&
+    deepEquality.equals(other.arrayAndItemsNullableProp, arrayAndItemsNullableProp) &&
+    deepEquality.equals(other.arrayItemsNullable, arrayItemsNullable) &&
+    deepEquality.equals(other.objectNullableProp, objectNullableProp) &&
+    deepEquality.equals(other.objectAndItemsNullableProp, objectAndItemsNullableProp) &&
+    deepEquality.equals(other.objectItemsNullable, objectItemsNullable);
 
   @override
   int get hashCode =>
@@ -108,7 +108,7 @@ class NullableClass {
       json[r'string_prop'] = null;
     }
     if (this.dateProp != null) {
-      json[r'date_prop'] = _dateFormatter.format(this.dateProp!.toUtc());
+      json[r'date_prop'] = dateFormatter.format(this.dateProp!.toUtc());
     } else {
       json[r'date_prop'] = null;
     }
@@ -153,9 +153,9 @@ class NullableClass {
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        requiredKeys.forEach((key) {
+        requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "NullableClass[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "NullableClass[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "NullableClass[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -164,7 +164,7 @@ class NullableClass {
         integerProp: mapValueOfType<int>(json, r'integer_prop'),
         numberProp: json[r'number_prop'] == null
             ? null
-            : num.parse('${json[r'number_prop']}'),
+            : num.parse('${json[r'number_prop'] ?? 0}'),
         booleanProp: mapValueOfType<bool>(json, r'boolean_prop'),
         stringProp: mapValueOfType<String>(json, r'string_prop'),
         dateProp: mapDateTime(json, r'date_prop', r''),
@@ -221,7 +221,7 @@ class NullableClass {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
+  static const requiredKeys = <String, bool>{
   };
 }
 

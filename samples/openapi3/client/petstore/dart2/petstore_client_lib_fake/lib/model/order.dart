@@ -8,7 +8,7 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
 
-part of openapi.api;
+import 'package:openapi/api.dart';
 
 class Order {
   /// Returns a new [Order] instance.
@@ -122,9 +122,9 @@ class Order {
       // Note 1: the values aren't checked for validity beyond being non-null.
       // Note 2: this code is stripped in release mode!
       assert(() {
-        requiredKeys.forEach((key) {
+        requiredKeys.forEach((key, nullable) {
           assert(json.containsKey(key), 'Required key "Order[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "Order[$key]" has a null value in JSON.');
+          assert(nullable || json[key] != null, 'Required non-nullable key "Order[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -182,14 +182,14 @@ class Order {
   }
 
   /// The list of required keys that must be present in a JSON.
-  static const requiredKeys = <String>{
+  static const requiredKeys = <String, bool>{
   };
 }
 
 /// Order Status
 class OrderStatusEnum {
   /// Instantiate a new enum with the provided [value].
-  const OrderStatusEnum._(this.value);
+  const OrderStatusEnum(this.value);
 
   /// The underlying value of this enum member.
   final String value;
@@ -199,9 +199,9 @@ class OrderStatusEnum {
 
   String toJson() => value;
 
-  static const placed = OrderStatusEnum._(r'placed');
-  static const approved = OrderStatusEnum._(r'approved');
-  static const delivered = OrderStatusEnum._(r'delivered');
+  static const placed = OrderStatusEnum(r'placed');
+  static const approved = OrderStatusEnum(r'approved');
+  static const delivered = OrderStatusEnum(r'delivered');
 
   /// List of all possible values in this [enum][OrderStatusEnum].
   static const values = <OrderStatusEnum>[
@@ -210,7 +210,7 @@ class OrderStatusEnum {
     delivered,
   ];
 
-  static OrderStatusEnum? fromJson(dynamic value) => OrderStatusEnumTypeTransformer().decode(value);
+  static OrderStatusEnum? fromJson(dynamic value) => OrderStatusEnumTypeTransformer().decode(value.toString());
 
   static List<OrderStatusEnum> listFromJson(dynamic json, {bool growable = false,}) {
     final result = <OrderStatusEnum>[];
@@ -224,6 +224,9 @@ class OrderStatusEnum {
     }
     return result.toList(growable: growable);
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is OrderStatusEnum && value == other.value;
 }
 
 /// Transformation class that can [encode] an instance of [OrderStatusEnum] to String,
